@@ -1,0 +1,3 @@
+debug lib/debug
+console lib/console
+test lib/test
