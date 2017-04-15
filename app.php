@@ -70,7 +70,7 @@
 				}
 			}
 		}
-		else if ($command==='list')
+		else if ($command==='list' || $command==='status')
 		{
 			foreach ($modules as $module)
 			{
