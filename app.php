@@ -65,7 +65,7 @@
 			{
 				if ($module->chdir())
 				{
-					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN).":".color($module->branch,YELLOW)." ";
 					execute("git checkout ".$module->branch);
 				}
 			}
