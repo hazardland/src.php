@@ -59,20 +59,33 @@
 	if (isset($argv[1]))
 	{
 		$command = strtolower($argv[1]);
-		if ($command=='list')
+		if ($command=='init')
 		{
 			foreach ($modules as $module)
 			{
-				if ($module->name!==null)
-				{
-					echo color ($module->name,YELLOW)." ";
-				}
-				if ($module->name!=$module->path)
-				{
-					echo color($module->path,CYAN);
-				}
 				if ($module->chdir())
 				{
+					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+					execute("git checkout ".$module->branch);
+				}
+			}
+		}
+		else if ($command==='list')
+		{
+			foreach ($modules as $module)
+			{
+				if ($module->chdir())
+				{
+					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+
+					$result = [];
+					preg_match ('/^\*\s([a-z]+)$/',execute("git branch"),$result);
+					$branch = null;
+					if (is_array($result) && isset($result[1]))
+					{
+						echo ":".color($result[1],YELLOW);
+					}
+					echo " ";
 					$result = execute("git status");
 					$changes = false;
 					if (strpos($result,'nothing to commit')===false)
@@ -128,11 +141,11 @@
 						echo execute ("git commit -a -m \"".$commit."\"")."\n";
 					}
 					echo color("Pulling",BLUE)."\n";
-					echo execute ("git pull origin master")."\n";
+					echo execute ("git pull origin ".$module->branch)."\n";
 					if ($changes)
 					{
 						echo color("Pushing",BLUE)."\n";
-						echo execute ("git push origin master")."\n";
+						echo execute ("git push origin ".$module->branch)."\n";
 					}
 				}
 				else
@@ -140,5 +153,10 @@
 					echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
 				}
 			}
+		}
+		else
+		{
+			echo color("app list",YELLOW)." ".color("sync all app modules with states (1.commit,2.pull,3.push)",CYAN)."\n";
+			echo color("app sync",YELLOW)." ".color("\"commit message\"",RED)." ".color("sync all app modules",CYAN)."\n";
 		}
 	}

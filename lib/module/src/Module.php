@@ -7,13 +7,19 @@
 		public $home;
 		public $name;
 		public $path;
+		public $branch;
 		public function __construct($home, $line)
 		{
 			$this->home = $home;
 	    	$line = explode (' ', $line);
 	    	if (is_array($line))
 	    	{
-	    		$this->path = $line[0];
+	    		$data = explode(':',$line[0]);
+	    		$this->path = $data[0];
+	    		if (isset($data[1]))
+	    		{
+	    			$this->branch = $data[1];
+	    		}
 	    		if (!isset($line[1]))
 	    		{
 	    			$this->name = null;
@@ -24,7 +30,7 @@
 	    		}
 	    		if ($this->name===null && $this->path==='/')
 	    		{
-	    			$this->name = '*';
+	    			$this->name = '/';
 	    		}
 	    	}
 		}
