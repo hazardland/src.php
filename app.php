@@ -133,7 +133,6 @@
 					echo "\n";
 					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
 					echo "\n------------------------\n";
-					echo color("Syncing",GREEN)."\n";//." ".color($module->name,PINK)."\n";
 					$result = strtolower(execute("git status"));
 					$changes = false;
 					if (strpos($result,'nothing to commit')===false)
