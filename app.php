@@ -2,6 +2,7 @@
 
 	require __DIR__.'/lib/console/console.php';
 	require __DIR__.'/lib/debug/debug.php';
+	require __DIR__.'/lib/module/src/Module.php';
 
 	function execute ($command)
 	{
@@ -29,19 +30,17 @@
 	        $line = trim(fgets($file));
 	        if ($line!='')
 	        {
-	        	$line = explode (' ', $line);
-	        	if (is_array($line))
+	        	if ($line[0]!='#')
 	        	{
-	        		$path = $line[0];
-	        		if (!isset($line[1]))
-	        		{
-	        			$name = null;
-	        		}
-	        		else
-	        		{
-	        			$name = $line[1];
-	        		}
-	        		$modules [$path] = $name;
+		        	$module = new \Module\Module($home, $line);
+		        	if ($module->path==null)
+		        	{
+		        		echo color("Invalid module config on line ".$line,RED);
+		        	}
+		        	else
+		        	{
+		        		$modules[$module->path] = $module;
+		        	}
 	        	}
 	        }
 	    }
@@ -52,6 +51,7 @@
 		echo color("Error opening .app file", RED);
 	}
 
+	//debug ($modules);
 
 	/**
 	 * process command
@@ -61,21 +61,17 @@
 		$command = strtolower($argv[1]);
 		if ($command=='list')
 		{
-			foreach ($modules as $path => $name)
+			foreach ($modules as $module)
 			{
-				if ($path==='/' && $name===null)
+				if ($module->name!==null)
 				{
-					$name = '*';
+					echo color ($module->name,YELLOW)." ";
 				}
-				if ($name!==null)
+				if ($module->name!=$module->path)
 				{
-					echo color ($name,YELLOW)." ";
+					echo color($module->path,CYAN);
 				}
-				if ($name!=$path)
-				{
-					echo color($path,CYAN);
-				}
-				if (file_exists($home.'/'.$path) && chdir($home.'/'.$path))
+				if ($module->chdir())
 				{
 					$result = execute("git status");
 					$changes = false;
@@ -92,7 +88,7 @@
 				}
 				else
 				{
-					echo " ".color("[bad path ".$path."]", RED)."\n";
+					echo " ".color("[bad path ".$module->path."]", RED)."\n";
 				}
 			}
 		}
@@ -109,27 +105,19 @@
 				echo color ("Module list empty", RED);
 				exit;
 			}
-			foreach ($modules as $path => $name)
+			foreach ($modules as $module)
 			{
-				if (!file_exists($home.'/'.$path))
+				if (!$module->exists())
 				{
-					echo color ("Path not exists ".$home.'/'.$path, RED);
+					echo color ("Path not exists ".$module->path(), RED);
 					exit;
 				}
 			}
-			foreach ($modules as $path => $name)
+			foreach ($modules as $module)
 			{
-				if (chdir($home.'/'.$path))
+				if ($module->chdir())
 				{
-					if ($path==='/' && $name===null)
-					{
-						$name = '*';
-					}
-					if ($name===null)
-					{
-						$name = $path;
-					}
-					echo color("\nSyncing",GREEN)." ".color($name,PINK)."\n";
+					echo color("\nSyncing",GREEN)." ".color($module->name,PINK)."\n";
 					$result = strtolower(execute("git status"));
 					$changes = false;
 					if (strpos($result,'nothing to commit')===false)
@@ -149,7 +137,7 @@
 				}
 				else
 				{
-					echo color ("Could not change dir to ".$home.'/'.$path, MAROON)."\n";
+					echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
 				}
 			}
 		}
