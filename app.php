@@ -76,10 +76,11 @@
 			{
 				if ($module->chdir())
 				{
-					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN);
 
 					$result = [];
-					preg_match ('/^\*\s([a-z]+)$/',execute("git branch"),$result);
+					preg_match ('/^\*\s([a-zA-Z_0-9]+)/',execute("git branch"),$result);
+					//debug (execute("git branch"),"dsadas");
 					$branch = null;
 					if (is_array($result) && isset($result[1]))
 					{
