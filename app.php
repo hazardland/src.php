@@ -11,9 +11,9 @@
 	}
 
 	$home = getcwd();
-	if (!file_exists($home.'/.modules'))
+	if (!file_exists($home.'/.app'))
 	{
-		echo color("Please cd to into folder containing file .modules", RED);
+		echo color("Please cd to into folder containing file .app", RED);
 		exit;
 	}
 
@@ -22,7 +22,7 @@
 	 * collect module data
 	 */
 	$modules = [];
-	if ($file = fopen($home.'/.modules', 'r'))
+	if ($file = fopen($home.'/.app', 'r'))
 	{
 	    while(!feof($file))
 	    {
@@ -49,7 +49,7 @@
 	}
 	else
 	{
-		echo color("Error opening .modules file", RED);
+		echo color("Error opening .app file", RED);
 	}
 
 
