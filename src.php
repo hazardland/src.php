@@ -136,9 +136,8 @@
 				if ($module->chdir())
 				{
 					echo "\n";
-					//echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
-					echo table([[color("[".$module->name."]",GREEN),color($module->path,CYAN)]]);
-					//echo "\n------------------------\n";
+					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+					echo "\n------------------------\n";
 					$result = execute("git status",true,GREEN);
 					echo $result."\n";
 					$result = strtolower($result);
