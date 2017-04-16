@@ -405,17 +405,19 @@
 	}
 	else
 	{
-		echo color("app add",YELLOW)." ".color("repo path [-sub]",RED)."\n    ".color("add source repository to project:",CYAN)."\n";
+		echo color("src add",YELLOW)." ".color("repo path [-sub]",RED)."\n    ".color("add source repository to project:",CYAN)."\n";
 			echo "    ".color("src add jquery app/public/js/jquery",GREEN)."\n";
 			echo "    ".color("src add core lib/core -sub",GREEN)." - add core as submodule\n\n";
 
-		echo color("app status",YELLOW)."\n    ".color("list all modules and their src states",CYAN)."\n\n";
+		echo color("src status",YELLOW)."\n    ".color("list all modules and their src states",CYAN)."\n\n";
 
-		echo color("app sync",YELLOW)." ".color("\"commit message\"",RED)."\n    ".color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",CYAN)."\n\n";
+		echo color("src sync",YELLOW)." ".color("\"commit message\"",RED)."\n    ".color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",CYAN)."\n\n";
 
-		echo color("app refresh",YELLOW)."\n    ".color("refresh repository cache",CYAN)."\n";
+		echo color("src init",YELLOW)."\n    ".color("init src with git",CYAN)."\n\n";
 
-		echo color("app list",YELLOW)."\n    ".color("list all repositories",CYAN)."\n";
+		echo color("src refresh",YELLOW)."\n    ".color("refresh repository cache",CYAN)."\n";
 
-		echo color("app check[out]",YELLOW)."\n    ".color("switch to configured branches",CYAN)."\n";
+		echo color("src list",YELLOW)."\n    ".color("list all repositories",CYAN)."\n";
+
+		echo color("src check[out]",YELLOW)."\n    ".color("switch to configured branches",CYAN)."\n";
 	}
