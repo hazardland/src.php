@@ -407,13 +407,13 @@
 	{
 		echo color("src add",YELLOW)." ".color("repo path [-sub]",RED)."\n    ".color("add source repository to project:",CYAN)."\n";
 			echo "    ".color("src add jquery app/public/js/jquery",GREEN)."\n";
-			echo "    ".color("src add core lib/core -sub",GREEN)." - add core as submodule\n\n";
+			echo "    ".color("src add core lib/core -sub",GREEN)." - add core as submodule\n";
 
-		echo color("src status",YELLOW)."\n    ".color("list all modules and their src states",CYAN)."\n\n";
+		echo color("src status",YELLOW)."\n    ".color("list all modules and their src states",CYAN)."\n";
 
-		echo color("src sync",YELLOW)." ".color("\"commit message\"",RED)."\n    ".color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",CYAN)."\n\n";
+		echo color("src sync",YELLOW)." ".color("\"commit message\"",RED)."\n    ".color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",CYAN)."\n";
 
-		echo color("src init",YELLOW)."\n    ".color("init src",CYAN)."\n\n";
+		echo color("src init",YELLOW)."\n    ".color("init src",CYAN)."\n";
 
 		echo color("src refresh",YELLOW)."\n    ".color("refresh repository cache",CYAN)."\n";
 
