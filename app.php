@@ -4,9 +4,13 @@
 	require __DIR__.'/lib/debug/debug.php';
 	require __DIR__.'/lib/module/src/Module.php';
 
-	function execute ($command)
+	function execute ($command, $debug=false, $color=BLUE)
 	{
 		$output = [];
+		if ($debug)
+		{
+			echo color ($command, $color)."\n";
+		}
 		exec ($command, $output);
 		return implode("\n", $output);
 	}
@@ -134,21 +138,21 @@
 					echo "\n";
 					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
 					echo "\n------------------------\n";
-					$result = strtolower(execute("git status"));
+					$result = strtolower(execute("git status",true,GREEN));
 					$changes = false;
 					if (strpos($result,'nothing to commit')===false)
 					{
 						$changes = true;
-						echo color("Commiting",BLUE)."\n";
-						echo execute ("git add --all")."\n";
-						echo execute ("git commit -a -m \"".$commit."\"")."\n";
+						//echo color("Commiting",BLUE)."\n";
+						echo execute ("git add --all", true,RED)."\n";
+						echo execute ("git commit -a -m \"".$commit."\"",true,RED)."\n";
 					}
-					echo color("Pulling",BLUE)."\n";
-					echo execute ("git pull origin ".$module->branch)."\n";
+					//echo color("Pulling",BLUE)."\n";
+					echo execute ("git pull origin ".$module->branch, true)."\n";
 					if ($changes)
 					{
-						echo color("Pushing",BLUE)."\n";
-						echo execute ("git push origin ".$module->branch)."\n";
+						//echo color("Pushing",BLUE)."\n";
+						echo execute ("git push origin ".$module->branch, true, RED)."\n";
 					}
 				}
 				else
