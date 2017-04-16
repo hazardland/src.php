@@ -138,7 +138,9 @@
 					echo "\n";
 					echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
 					echo "\n------------------------\n";
-					$result = strtolower(execute("git status",true,GREEN));
+					$result = execute("git status",true,GREEN);
+					echo $result."\n";
+					$result = strtolower($result);
 					$changes = false;
 					if (strpos($result,'nothing to commit')===false)
 					{
