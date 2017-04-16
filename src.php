@@ -134,7 +134,7 @@
 		exit;
 	}
 
-	if ($argv[1]=='refresh' && file_exists(__DIR__.'/.cache'))
+	if (isset($argv[1]) && $argv[1]=='refresh' && file_exists(__DIR__.'/.cache'))
 	{
 		echo color("Cleaning repo cache",BLUE)."\n";
 		unlink (__DIR__.'/.cache');
@@ -170,7 +170,7 @@
 
 	if ($repos_new)
 	{
-		echo color("Writing repository cache",BLUE);
+		echo color("Writing repository cache",BLUE)."\n";
 		repo_cache(__DIR__.'/.cache');
 	}
 
