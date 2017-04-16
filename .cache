@@ -1,0 +1,9 @@
+debug.php=git@github.com:hazardland/debug.php.git
+app.php=git@github.com:hazardland/app.php.git
+console.php=git@github.com:hazardland/console.php.git
+core.php=git@github.com:hazardland/core.php.git
+html.php=git@github.com:hazardland/html.php.gitwindows.js
+tool.android=git@github.com:hazardland/tool.android.git
+db.android=git@github.com:hazardland/db.android.php.git
+lib.lazarus=git@github.com:hazardland/lib.lazarus.git
+lib.java=git@github.com:hazardland/lib.java.git
