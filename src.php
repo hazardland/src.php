@@ -132,7 +132,7 @@
 	if (isset($argv[1]) && $argv[1]=='init' && !file_exists($home.'/.src'))
 	{
 		echo color("Initing in: ".$home,BLUE)."\n";
-		if (!file_exists($home.'/.git'))
+		if (false && !file_exists($home.'/.git'))
 		{
 			execute ("git init",true);
 		}
@@ -413,7 +413,7 @@
 
 		echo color("src sync",YELLOW)." ".color("\"commit message\"",RED)."\n    ".color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",CYAN)."\n\n";
 
-		echo color("src init",YELLOW)."\n    ".color("init src with git",CYAN)."\n\n";
+		echo color("src init",YELLOW)."\n    ".color("init src",CYAN)."\n\n";
 
 		echo color("src refresh",YELLOW)."\n    ".color("refresh repository cache",CYAN)."\n";
 
