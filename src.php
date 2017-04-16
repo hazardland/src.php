@@ -71,7 +71,7 @@
 	{
 		$content = trim(file_get_contents($file));
 		//debug ($content,'content');
-		$content = preg_replace(['/[\n]+/','/\#.+\n/','/[\s]+\n/'], ["\n",'',''], $content);
+		$content = preg_replace(['/[\s]+\n/', '/\n{1,}+/', '/\#.+\n/'], ["\n","\n",''], $content);
 		return $content;
 	}
 
@@ -109,7 +109,7 @@
 			$result = '';
 			foreach ($GLOBALS['repos'] as $name => $repo)
 			{
-				$result .= $name.'='.$repo['link'].':'.$repo['branch']."\n";
+				$result .= $name.'='.$repo['link'].' '.$repo['branch']."\n";
 			}
 			file_put_contents($path, $result);
 		}
@@ -128,6 +128,17 @@
 	}
 
 	$home = getcwd();
+
+	if (isset($argv[1]) && $argv[1]=='init' && !file_exists($home.'/.src'))
+	{
+		echo color("Initing in: ".$home,BLUE)."\n";
+		if (!file_exists($home.'/.git'))
+		{
+			execute ("git init",true);
+		}
+		file_put_contents ($home.'/.src','');
+	}
+
 	if (!file_exists($home.'/.src'))
 	{
 		echo color("Please cd to into folder containing file .src\n", RED);
@@ -216,7 +227,7 @@
 	{
 		$command = strtolower($argv[1]);
 	}
-	if ($command=='checkout')
+	if ($command=='checkout' || $command=='check')
 	{
 		foreach ($modules as $module)
 		{
@@ -320,6 +331,10 @@
 	{
 		//command is already processe above
 	}
+	else if ($command==='init')
+	{
+		//command is already processe above
+	}
 	else if ($command=='list')
 	{
 		if (!$repos)
@@ -402,5 +417,5 @@
 
 		echo color("app list",YELLOW)."\n    ".color("list all repositories",CYAN)."\n";
 
-		echo color("app checkout",YELLOW)."\n    ".color("switch to configured branches",CYAN)."\n";
+		echo color("app check[out]",YELLOW)."\n    ".color("switch to configured branches",CYAN)."\n";
 	}
