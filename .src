@@ -1,3 +1,3 @@
-lib/debug:master
-lib/console:master console
-/:master
+/lib/debug:master debug
+/lib/console:master console
+/:master src
