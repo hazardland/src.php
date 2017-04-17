@@ -70,6 +70,17 @@ function modules_save ($path)
 		file_put_contents($path, $result);
 	}
 }
+function git_branch ($path)
+{
+	chdir($path);
+	$result = [];
+	preg_match ('/^\*\s([a-zA-Z_0-9]+)/',execute("git branch"),$result);
+	if (is_array($result) && isset($result[1]))
+	{
+		return trim($result[1]);
+	}
+}
+
 function module_search ($home,$path='',&$modules=[])
 {
 	$name = basename($home.$path);
@@ -84,7 +95,7 @@ function module_search ($home,$path='',&$modules=[])
 			{
 				if ($item=='.git')
 				{
-					$modules[$name] = new module($home, ($path==''?'/':$path), $name, 'master');
+					$modules[$name] = new module($home, ($path==''?'/':$path), $name, git_branch($home.$path));
 				}
 				elseif (is_dir($home.$path.'/'.$item))
 				{
