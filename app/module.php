@@ -6,30 +6,37 @@ class module
 	public $name;
 	public $path;
 	public $branch;
-	public function __construct($home, $line)
+	public function __construct($home, $path, $name, $branch)
 	{
 		$this->home = $home;
+		$this->path = $path;
+		$this->name = $name;
+		$this->branch = $branch;
+	}
+	public static function parse ($home, $line)
+	{
     	$line = explode (' ', $line);
     	if (is_array($line))
     	{
     		$data = explode(':',$line[0]);
-    		$this->path = $data[0];
+    		$path = $data[0];
     		if (isset($data[1]))
     		{
-    			$this->branch = $data[1];
+    			$branch = $data[1];
     		}
     		if (!isset($line[1]))
     		{
-    			$this->name = null;
+    			$name = null;
     		}
     		else
     		{
-    			$this->name = $line[1];
+    			$name = $line[1];
     		}
-    		if ($this->name===null && $this->path==='/')
+    		if ($name===null && $path==='/')
     		{
-    			$this->name = '/';
+    			$name = '/';
     		}
+    		return new module($home, $path, $name, $branch);
     	}
 	}
 	public function path()

@@ -70,3 +70,29 @@ function modules_save ($path)
 		file_put_contents($path, $result);
 	}
 }
+function module_search ($home,$path='',&$modules=[])
+{
+	$name = basename($home.$path);
+	$result = scandir($home.$path,1);
+	//debug ($name);
+	//exit;
+	if (is_array($result))
+	{
+		foreach ($result as $item)
+		{
+			if ($item!=='.' && $item!='..')
+			{
+				if ($item=='.git')
+				{
+					$modules[$name] = new module($home, ($path==''?'/':$path), $name, 'master');
+				}
+				elseif (is_dir($home.$path.'/'.$item))
+				{
+					//debug ($home.$path.'/'.$item);
+					module_search($home,$path.'/'.$item,$modules);
+				}
+			}
+		}
+	}
+	return $modules;
+}

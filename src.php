@@ -11,6 +11,11 @@
 	app::$src = app::$home.'/.src';
 	app::$repo = __DIR__.'/repos';
 
+	if (isset($argv[1]) && $argv[1]=='reinit')
+	{
+		app::reinit();
+	}
+
 	if (isset($argv[1]) && $argv[1]=='init' && !file_exists(app::$src))
 	{
 		app::init ();
@@ -28,8 +33,6 @@
 	}
 
 	app::load();
-
-	//debug ($modules);
 
 	/**
 	 * process command
@@ -57,6 +60,10 @@
 		//command is already processe above
 	}
 	else if ($command==='init')
+	{
+		//command is already processe above
+	}
+	else if ($command==='reinit')
 	{
 		//command is already processe above
 	}

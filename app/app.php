@@ -11,11 +11,27 @@ class app
 	public static function init ()
 	{
 		echo color("Initing in: ".self::$home,BLUE)."\n";
-		if (false && !file_exists(self::$home.'/.git'))
+		self::$modules = module_search(self::$home);
+		if (is_array(self::$modules))
 		{
-			execute ("git init",true);
+			echo color("Found ".count(self::$modules)." modules:",BLUE)."\n";
+			foreach (self::$modules as $module)
+			{
+				echo $module->name."\n";
+			}
 		}
-		file_put_contents (self::$src,'');
+		else
+		{
+			echo color("Found 0 modules",RED)."\n";
+		}
+		//file_put_contents (self::$src,'');
+		modules_save(self::$src);
+		self::$modules = [];
+	}
+	public static function reinit ()
+	{
+		unlink (self::$src);
+		self::init();
 	}
 	public static function refresh ()
 	{
@@ -71,7 +87,7 @@ class app
 		        {
 		        	if ($line[0]!='#')
 		        	{
-			        	$module = new module(self::$home, $line);
+			        	$module = module::parse(self::$home, $line);
 			        	if ($module->path==null)
 			        	{
 			        		echo color("Invalid module config on line ".$line,RED);
@@ -250,7 +266,7 @@ class app
 		{
 			chdir(self::$home.'/'.$path);
 			execute("git checkout ".$branch, true);
-			self::$modules[$path] = new module (self::$home, $path.':'.$branch.' '.$repo);
+			self::$modules[$path] = new module (self::$home, $path, $repo, $branch);
 			modules_save(self::$src);
 		}
 		else
