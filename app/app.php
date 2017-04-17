@@ -124,7 +124,7 @@ class app
 			if ($module->chdir())
 			{
 				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN);
-				if (is_array($result) && isset($result[1]))
+				if (isset($result) && is_array($result) && isset($result[1]))
 				{
 					echo ":".color(git_branch($module->path()),YELLOW);
 				}
