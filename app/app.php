@@ -17,7 +17,7 @@ class app
 			echo color("Found ".count(self::$modules)." modules:",BLUE)."\n";
 			foreach (self::$modules as $module)
 			{
-				echo $module->name."\n";
+				echo $module->name.':'.$module->branch."\n";
 			}
 		}
 		else
@@ -124,14 +124,9 @@ class app
 			if ($module->chdir())
 			{
 				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN);
-
-				$result = [];
-				preg_match ('/^\*\s([a-zA-Z_0-9]+)/',execute("git branch"),$result);
-				//debug (execute("git branch"),"dsadas");
-				$branch = null;
-				if (is_array($result) && isset($result[1]))
+				if (isset($result) && is_array($result) && isset($result[1]))
 				{
-					echo ":".color($result[1],YELLOW);
+					echo ":".color(git_branch($module->path()),YELLOW);
 				}
 				echo " ";
 				$result = execute("git status");
@@ -143,7 +138,7 @@ class app
 					{
 						$modified = '';
 					}
-					echo " ".color("+".$modified,RED);
+					echo color("+".$modified,RED);
 				}
 				echo "\n";
 			}
@@ -284,7 +279,9 @@ class app
 
 		echo color("src sync",YELLOW)." ".color("\"commit message\"",RED)."\n    ".color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",CYAN)."\n";
 
-		echo color("src init",YELLOW)."\n    ".color("init src",CYAN)."\n";
+		echo color("src init",YELLOW)."\n    ".color("scan for git repos inside dir and init src",CYAN)."\n";
+
+		echo color("src reinit",YELLOW)."\n    ".color("rescan dir and reinit src",CYAN)."\n";
 
 		echo color("src refresh",YELLOW)."\n    ".color("refresh repository cache",CYAN)."\n";
 
