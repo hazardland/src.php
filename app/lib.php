@@ -95,7 +95,7 @@ function module_search ($home,$path='',&$modules=[])
 			{
 				if ($item=='.git')
 				{
-					$modules[$name] = new module($home, ($path==''?'/':$path), $name, git_branch($home.$path));
+					$modules[($path==''?'/':$path)] = new module($home, ($path==''?'/':$path), $name, git_branch($home.$path));
 				}
 				elseif (is_dir($home.$path.'/'.$item))
 				{
