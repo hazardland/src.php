@@ -3,6 +3,7 @@ app.php=git@github.com:hazardland/app.php.git master
 console.php=git@github.com:hazardland/console.php.git master
 core.php=git@github.com:hazardland/core.php.git master
 html.php=git@github.com:hazardland/html.php.git master
+user.php=git@github.com:hazardland/user.php.git master
 windows.js=git@github.com:hazardland/windows.js.git master
 tool.android=git@github.com:hazardland/tool.android.git master
 db.android=git@github.com:hazardland/db.android.php.git master
