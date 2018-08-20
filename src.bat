@@ -1,2 +1,2 @@
 @echo off
-"php" "d:\web\php\src\src.php" %*
+"php" "%~dp0/src.php" %*
