@@ -201,6 +201,57 @@ class app
 			}
 		}
 	}
+	public static function update ()
+	{
+		if (!self::$modules)
+		{
+			echo color ("Module list empty", RED);
+			exit;
+		}
+		foreach (self::$modules as $module)
+		{
+			if (!$module->exists())
+			{
+				echo color ("Path not exists ".$module->path(), RED);
+				exit;
+			}
+			if ($module->chdir())
+			{
+				$result = strtolower(execute("git status",true,GREEN));
+				if (strpos($result,'nothing to commit')===false)
+				{
+					echo color ("You have not commited changes in ".$module->path(), MAROON)."\n";
+					exit;
+				}
+			}
+			else
+			{
+				echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
+				exit;
+			}			
+		}
+		foreach (self::$modules as $module)
+		{
+			if ($module->chdir())
+			{
+				echo "\n";
+				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+				echo "\n------------------------\n";
+				$result = execute("git status",true,GREEN);
+				$result = strtolower($result);
+				$changes = false;
+				if (strpos($result,'nothing to commit')===false)
+				{
+					$changes = true;
+				}
+				echo execute ("git pull origin ".$module->branch, true)."\n";
+			}
+			else
+			{
+				echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
+			}
+		}		
+	}	
 	public static function ls ()
 	{
 		if (!self::$repos)
@@ -274,6 +325,8 @@ class app
 		echo color("src add",YELLOW)." ".color("repo path [-sub]",RED)."\n    ".color("add source repository to project:",CYAN)."\n";
 			echo "    ".color("src add jquery app/public/js/jquery",GREEN)."\n";
 			echo "    ".color("src add core lib/core -sub",GREEN)." - add core as submodule\n";
+
+		echo color("src update",YELLOW)."\n    ".color("pull changes in all modules if you have nothing to commit",CYAN)."\n";
 
 		echo color("src status",YELLOW)."\n    ".color("list all modules and their src states",CYAN)."\n";
 
