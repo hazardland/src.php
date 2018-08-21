@@ -75,6 +75,10 @@
 	{
 		app::add ($argv);
 	}
+	else if ($command==='update')
+	{
+		app::update ();
+	}
 	else
 	{
 		app::help();
