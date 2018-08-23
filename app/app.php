@@ -113,7 +113,7 @@ class app
 			if ($module->chdir())
 			{
 				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN).":".color($module->branch,YELLOW)." ";
-				execute("git checkout ".$module->branch);
+				execute("git checkout master");
 			}
 		}
 	}
@@ -228,7 +228,7 @@ class app
 			{
 				echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
 				exit;
-			}			
+			}
 		}
 		foreach (self::$modules as $module)
 		{
@@ -250,8 +250,8 @@ class app
 			{
 				echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
 			}
-		}		
-	}	
+		}
+	}
 	public static function ls ()
 	{
 		if (!self::$repos)
