@@ -10,11 +10,11 @@ class app
 	public static $repos = [];
 	public static function init ()
 	{
-		echo color("Initing in: ".self::$home,BLUE)."\n";
+		echo \console\color("Initing in: ".self::$home,\console\BLUE)."\n";
 		self::$modules = module_search(self::$home);
 		if (is_array(self::$modules))
 		{
-			echo color("Found ".count(self::$modules)." modules:",BLUE)."\n";
+			echo \console\color("Found ".count(self::$modules)." modules:",\console\BLUE)."\n";
 			foreach (self::$modules as $module)
 			{
 				echo $module->name.':'.$module->branch."\n";
@@ -22,7 +22,7 @@ class app
 		}
 		else
 		{
-			echo color("Found 0 modules",RED)."\n";
+			echo \console\color("Found 0 modules",\console\RED)."\n";
 		}
 		//file_put_contents (self::$src,'');
 		modules_save(self::$src);
@@ -35,7 +35,7 @@ class app
 	}
 	public static function refresh ()
 	{
-		echo color("Cleaning repo cache",BLUE)."\n";
+		echo \console\color("Cleaning repo cache",\console\BLUE)."\n";
 		unlink (self::$cache);
 	}
 	public static function load ()
@@ -44,7 +44,7 @@ class app
 		$repos_new = false;
 		if (!file_exists(self::$cache))
 		{
-			echo color("Searching for repositories in ",BLUE).color(self::$repo,YELLOW)."\n";
+			echo \console\color("Searching for repositories in ",\console\BLUE).\console\color(self::$repo,\console\YELLOW)."\n";
 			$result = scandir(self::$repo,1);
 			if (is_array($result))
 			{
@@ -53,7 +53,7 @@ class app
 					if ($path!='.' && $path!='..' && !is_dir(self::$repo.'/'.$path))
 					{
 						$link = config (self::$repo.'/'.$path);
-						echo color("Fetching repository ",BLUE).color($path,GREEN).color(" '".$link."'",LIME)."\n";
+						echo \console\color("Fetching repository ",\console\BLUE).\console\color($path,\console\GREEN).\console\color(" '".$link."'",\console\LIME)."\n";
 						if ($link)
 						{
 							$repos_new = true;
@@ -70,7 +70,7 @@ class app
 
 		if ($repos_new)
 		{
-			echo color("Writing repository cache",BLUE)."\n";
+			echo \console\color("Writing repository cache",\console\BLUE)."\n";
 			repo_cache(self::$cache);
 		}
 
@@ -90,7 +90,7 @@ class app
 			        	$module = module::parse(self::$home, $line);
 			        	if ($module->path==null)
 			        	{
-			        		echo color("Invalid module config on line ".$line,RED);
+			        		echo \console\color("Invalid module config on line ".$line,\console\RED);
 			        	}
 			        	else
 			        	{
@@ -103,7 +103,7 @@ class app
 		}
 		else
 		{
-			echo color("Error opening .src file", RED);
+			echo \console\color("Error opening .src file", \console\RED);
 		}
 	}
 	public static function checkout ()
@@ -112,7 +112,7 @@ class app
 		{
 			if ($module->chdir())
 			{
-				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN).":".color($module->branch,YELLOW)." ";
+				echo \console\color("[".$module->name."]",\console\GREEN)." ".\console\color($module->path,\console\CYAN).":".\console\color($module->branch,\console\YELLOW)." ";
 				execute("git checkout master");
 			}
 		}
@@ -123,10 +123,10 @@ class app
 		{
 			if ($module->chdir())
 			{
-				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN);
+				echo \console\color("[".$module->name."]",\console\GREEN)." ".\console\color($module->path,\console\CYAN);
 				if (isset($result) && is_array($result) && isset($result[1]))
 				{
-					echo ":".color(git_branch($module->path()),YELLOW);
+					echo ":".\console\color(git_branch($module->path()),\console\YELLOW);
 				}
 				echo " ";
 				$result = execute("git status");
@@ -138,13 +138,13 @@ class app
 					{
 						$modified = '';
 					}
-					echo color("+".$modified,RED);
+					echo \console\color("+".$modified,\console\RED);
 				}
 				echo "\n";
 			}
 			else
 			{
-				echo " ".color("[bad path ".$module->path."]", RED)."\n";
+				echo " ".\console\color("[bad path ".$module->path."]", \console\RED)."\n";
 			}
 		}
 	}
@@ -152,20 +152,20 @@ class app
 	{
 		if (!isset($argv[2]) || !$argv[2])
 		{
-			echo color ("Please specify commit title for sync", RED);
+			echo \console\color("Please specify commit title for sync", \console\RED);
 			exit;
 		}
 		$commit = $argv[2];
 		if (!self::$modules)
 		{
-			echo color ("Module list empty", RED);
+			echo \console\color("Module list empty", \console\RED);
 			exit;
 		}
 		foreach (self::$modules as $module)
 		{
 			if (!$module->exists())
 			{
-				echo color ("Path not exists ".$module->path(), RED);
+				echo \console\color("Path not exists ".$module->path(), \console\RED);
 				exit;
 			}
 		}
@@ -174,30 +174,30 @@ class app
 			if ($module->chdir())
 			{
 				echo "\n";
-				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+				echo \console\color("[".$module->name."]",\console\GREEN)." ".\console\color($module->path,\console\CYAN)." ";
 				echo "\n------------------------\n";
-				$result = execute("git status",true,GREEN);
+				$result = execute("git status",true,\console\GREEN);
 				echo $result."\n";
 				$result = strtolower($result);
 				$changes = false;
 				if (strpos($result,'nothing to commit')===false)
 				{
 					$changes = true;
-					//echo color("Commiting",BLUE)."\n";
-					echo execute ("git add --all", true,RED)."\n";
-					echo execute ("git commit -a -m \"".$commit."\"",true,RED)."\n";
+					//echo \console\color("Commiting",\console\BLUE)."\n";
+					echo execute ("git add --all", true,\console\RED)."\n";
+					echo execute ("git commit -a -m \"".$commit."\"",true,\console\RED)."\n";
 				}
-				//echo color("Pulling",BLUE)."\n";
+				//echo \console\color("Pulling",\console\BLUE)."\n";
 				echo execute ("git pull origin ".$module->branch, true)."\n";
 				if ($changes)
 				{
-					//echo color("Pushing",BLUE)."\n";
-					echo execute ("git push origin ".$module->branch, true, RED)."\n";
+					//echo \console\color("Pushing",\console\BLUE)."\n";
+					echo execute ("git push origin ".$module->branch, true, \console\RED)."\n";
 				}
 			}
 			else
 			{
-				echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
+				echo \console\color("Could not change dir to ".$module->path(), \console\MAROON)."\n";
 			}
 		}
 	}
@@ -205,28 +205,28 @@ class app
 	{
 		if (!self::$modules)
 		{
-			echo color ("Module list empty", RED);
+			echo \console\color("Module list empty", \console\RED);
 			exit;
 		}
 		foreach (self::$modules as $module)
 		{
 			if (!$module->exists())
 			{
-				echo color ("Path not exists ".$module->path(), RED);
+				echo \console\color("Path not exists ".$module->path(), \console\RED);
 				exit;
 			}
 			if ($module->chdir())
 			{
-				$result = strtolower(execute("git status",true,GREEN));
+				$result = strtolower(execute("git status",true,\console\GREEN));
 				if (strpos($result,'nothing to commit')===false)
 				{
-					echo color ("You have not commited changes in ".$module->path(), MAROON)."\n";
+					echo \console\color("You have not commited changes in ".$module->path(), \console\MAROON)."\n";
 					exit;
 				}
 			}
 			else
 			{
-				echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
+				echo \console\color("Could not change dir to ".$module->path(), \console\MAROON)."\n";
 				exit;
 			}
 		}
@@ -235,9 +235,9 @@ class app
 			if ($module->chdir())
 			{
 				echo "\n";
-				echo color("[".$module->name."]",GREEN)." ".color($module->path,CYAN)." ";
+				echo \console\color("[".$module->name."]",\console\GREEN)." ".\console\color($module->path,\console\CYAN)." ";
 				echo "\n------------------------\n";
-				$result = execute("git status",true,GREEN);
+				$result = execute("git status",true,\console\GREEN);
 				$result = strtolower($result);
 				$changes = false;
 				if (strpos($result,'nothing to commit')===false)
@@ -248,7 +248,7 @@ class app
 			}
 			else
 			{
-				echo color ("Could not change dir to ".$module->path(), MAROON)."\n";
+				echo \console\color("Could not change dir to ".$module->path(), \console\MAROON)."\n";
 			}
 		}
 	}
@@ -256,30 +256,30 @@ class app
 	{
 		if (!self::$repos)
 		{
-			echo color("Repository list empty!",RED)."\n";
+			echo \console\color("Repository list empty!",\console\RED)."\n";
 			exit;
 		}
 		foreach (self::$repos as $name => $repo)
 		{
-			echo color($name,YELLOW)."\n";
+			echo \console\color($name,\console\YELLOW)."\n";
 		}
 	}
 	public static function add ($argv)
 	{
 		if (!isset($argv[2]) || !$argv[2])
 		{
-			echo color("Specify repository name!",RED)."\n";
+			echo \console\color("Specify repository name!",\console\RED)."\n";
 			exit;
 		}
 		$repo = $argv[2];
 		if (!isset(self::$repos[$repo]))
 		{
-			echo color("Unknown repository ".$repo,RED)."\n";
+			echo \console\color("Unknown repository ".$repo,\console\RED)."\n";
 			exit;
 		}
 		if (!isset($argv[3]) || !$argv[3])
 		{
-			echo color("Specify path for repository",RED)."\n";
+			echo \console\color("Specify path for repository",\console\RED)."\n";
 			exit;
 		}
 		$path = $argv[3];
@@ -293,7 +293,7 @@ class app
 		}
 		if (is_dir(self::$home.'/'.$path))
 		{
-			echo color ("Folder already exists: ".self::$home.'/'.$path,RED)."\n";
+			echo \console\color("Folder already exists: ".self::$home.'/'.$path,\console\RED)."\n";
 			exit;
 		}
 		//debug ($repos[$repo]);
@@ -317,29 +317,29 @@ class app
 		}
 		else
 		{
-			echo color ("Something failed?",RED);
+			echo \console\color("Something failed?",\console\RED);
 		}
 	}
 	public static function help()
 	{
-		echo color("src add",YELLOW)." ".color("repo path [-sub]",RED)."\n    ".color("add source repository to project:",CYAN)."\n";
-			echo "    ".color("src add jquery app/public/js/jquery",GREEN)."\n";
-			echo "    ".color("src add core lib/core -sub",GREEN)." - add core as submodule\n";
+		echo \console\color("src add",\console\YELLOW)." ".\console\color("repo path [-sub]",\console\RED)."\n    ".\console\color("add source repository to project:",\console\CYAN)."\n";
+			echo "    ".\console\color("src add jquery app/public/js/jquery",\console\GREEN)."\n";
+			echo "    ".\console\color("src add core lib/core -sub",\console\GREEN)." - add core as submodule\n";
 
-		echo color("src update",YELLOW)."\n    ".color("pull changes in all modules if you have nothing to commit",CYAN)."\n";
+		echo \console\color("src update",\console\YELLOW)."\n    ".\console\color("pull changes in all modules if you have nothing to commit",\console\CYAN)."\n";
 
-		echo color("src status",YELLOW)."\n    ".color("list all modules and their src states",CYAN)."\n";
+		echo \console\color("src status",\console\YELLOW)."\n    ".\console\color("list all modules and their src states",\console\CYAN)."\n";
 
-		echo color("src sync",YELLOW)." ".color("\"commit message\"",RED)."\n    ".color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",CYAN)."\n";
+		echo \console\color("src sync",\console\YELLOW)." ".\console\color("\"commit message\"",\console\RED)."\n    ".\console\color("sync all app modules\n\t1.commit\n\t2.pull\n\t3.push",\console\CYAN)."\n";
 
-		echo color("src init",YELLOW)."\n    ".color("scan for git repos inside dir and init src",CYAN)."\n";
+		echo \console\color("src init",\console\YELLOW)."\n    ".\console\color("scan for git repos inside dir and init src",\console\CYAN)."\n";
 
-		echo color("src reinit",YELLOW)."\n    ".color("rescan dir and reinit src",CYAN)."\n";
+		echo \console\color("src reinit",\console\YELLOW)."\n    ".\console\color("rescan dir and reinit src",\console\CYAN)."\n";
 
-		echo color("src refresh",YELLOW)."\n    ".color("refresh repository cache",CYAN)."\n";
+		echo \console\color("src refresh",\console\YELLOW)."\n    ".\console\color("refresh repository cache",\console\CYAN)."\n";
 
-		echo color("src list",YELLOW)."\n    ".color("list all repositories",CYAN)."\n";
+		echo \console\color("src list",\console\YELLOW)."\n    ".\console\color("list all repositories",\console\CYAN)."\n";
 
-		echo color("src check[out]",YELLOW)."\n    ".color("switch to configured branches",CYAN)."\n";
+		echo \console\color("src check[out]",\console\YELLOW)."\n    ".\console\color("switch to configu\console\RED branches",\console\CYAN)."\n";
 	}
 }

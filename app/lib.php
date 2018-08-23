@@ -1,11 +1,11 @@
 <?php
 
-function execute ($command, $debug=false, $color=BLUE)
+function execute ($command, $debug=false, $color=\console\BLUE)
 {
 	$output = [];
 	if ($debug)
 	{
-		echo color ($command, $color)."\n";
+		echo \console\color($command, $color)."\n";
 	}
 	exec ($command, $output);
 	return implode("\n", $output);

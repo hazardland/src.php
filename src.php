@@ -23,7 +23,7 @@
 
 	if (!file_exists(app::$src))
 	{
-		echo color("Please cd to into folder containing file .src\n", RED);
+		echo \console\color("Please cd to into folder containing file .src\n", \console\RED);
 		exit;
 	}
 
